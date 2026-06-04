@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ObjectPool<T> where T : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class ObjectPool<T> where T : MonoBehaviour
         for (int i = 0; i < InitialSize; i++)
         {
             T obj = CreateNew();
-            obj.gameObject.SetActive(true);
+            obj.gameObject.SetActive(false);
             Pool.Enqueue(obj);
         }
     }
