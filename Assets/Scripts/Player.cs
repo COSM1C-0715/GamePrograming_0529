@@ -5,8 +5,11 @@ using R3.Triggers;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] GameObject CollPoint;
     [SerializeField] float speed;
     [SerializeField] float jumpSpeed;
+    [SerializeField]
+    bool isClick;
 
     public float MaxLife => 100f;
     public ReactiveProperty<float> life { get; private set; } = new();
@@ -14,9 +17,15 @@ public class Player : MonoBehaviour
     PlayerInput playerInput;
     Rigidbody2D rb;
 
+    void OnInteract(InputValue val)
+    {
+        isClick = val.isPressed;
+        CollPoint.SetActive(isClick);
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        CollPoint.SetActive(false);
         playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
         life.Value = MaxLife;
@@ -26,28 +35,28 @@ public class Player : MonoBehaviour
     void Update()
     {
         // 移動
-        var move = playerInput.actions["Move"].ReadValue<Vector2>();
-        if (move.x != 0f)
-        {
-            rb.linearVelocityX = move.x * speed;
+        //var move = playerInput.actions["Move"].ReadValue<Vector2>();
+        //if (move.x != 0f)
+        //{
+        //    rb.linearVelocityX = move.x * speed;
 
-            // 向き
-            var localScale = transform.localScale;
-            if (move.x < 0)
-            {
-                localScale.x = 1f;
-            }
-            else
-            {
-                localScale.x = -1f;
-            }
-            transform.localScale = localScale;
-        }
+        //    // 向き
+        //    var localScale = transform.localScale;
+        //    if (move.x < 0)
+        //    {
+        //        localScale.x = 1f;
+        //    }
+        //    else
+        //    {
+        //        localScale.x = -1f;
+        //    }
+        //    transform.localScale = localScale;
+        //}
 
-        // ジャンプ
-        if (playerInput.actions["Jump"].WasPressedThisFrame())
-        {
-            rb.linearVelocityY = jumpSpeed;
-        }
+        //// ジャンプ
+        //if (playerInput.actions["Jump"].WasPressedThisFrame())
+        //{
+        //    rb.linearVelocityY = jumpSpeed;
+        //}
     }
 }

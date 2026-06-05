@@ -1,11 +1,26 @@
+using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    Rigidbody2D rb2d;
+
     [SerializeField]
     int EnemyNum;
 
+    [SerializeField]
+    int Speed;
+
+    Vector2 InputVec = new Vector2(-1,0);
+
     public int p_EnemyNum => EnemyNum;
+
+    Action<Enemy> onReturn;
+
+    void Awake()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,6 +30,17 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        rb2d.linearVelocity = InputVec.normalized * Speed;
+    }
+    public void Initialize(Action<Enemy> onReturn)
+    {
+        this.onReturn = onReturn;
+    }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.name== "ColliderPoint")
+        {
+            onReturn?.Invoke(this);
+        }
     }
 }

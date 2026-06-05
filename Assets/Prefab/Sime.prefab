@@ -111,6 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   EnemyNum: 1
+  Speed: 5
 --- !u!1 &8114247071098988057
 GameObject:
   m_ObjectHideFlags: 0
