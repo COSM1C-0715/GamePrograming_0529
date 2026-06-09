@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -14,6 +14,10 @@ public class Enemy : MonoBehaviour
     Vector2 InputVec = new Vector2(-1,0);
 
     public int p_EnemyNum => EnemyNum;
+
+    public int p_Speed => Speed;
+
+    public double TargetdespTime {  get;  set; }
 
     Action<Enemy> onReturn;
 

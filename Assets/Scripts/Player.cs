@@ -1,32 +1,39 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using R3;               // R3 core
 using R3.Triggers;
+using System;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] GameObject CollPoint;
+    [SerializeField] EnemySpawner Spawner;
     [SerializeField] float speed;
     [SerializeField] float jumpSpeed;
-    [SerializeField]
-    bool isClick;
-
     public float MaxLife => 100f;
     public ReactiveProperty<float> life { get; private set; } = new();
 
-    PlayerInput playerInput;
-    Rigidbody2D rb;
+    InputSystem_Actions action;
 
-    void OnInteract(InputValue val)
+    Rigidbody2D rb;
+    void Awake()
     {
-        isClick = val.isPressed;
-        CollPoint.SetActive(isClick);
+        action = new InputSystem_Actions();
+    }
+
+    void OnEnable()
+    {
+        action.Enable();
+        action.Player.Interact.started += OnJudgePoint;
+    }
+
+    void OnDisable()
+    {
+        action.Player.Interact.started -= OnJudgePoint;
+        action.Disable();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        CollPoint.SetActive(false);
-        playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
         life.Value = MaxLife;
     }
@@ -58,5 +65,28 @@ public class Player : MonoBehaviour
         //{
         //    rb.linearVelocityY = jumpSpeed;
         //}
+    }
+    void OnJudgePoint(InputAction.CallbackContext cont)
+    {
+        if(cont.started)
+        {
+            Debug.Log("押された");
+            if (Spawner.P_EnemyTiming.Count==0) return;
+
+            Enemy enemy = Spawner.P_EnemyTiming.Peek();
+
+            double currenttime = AudioSettings.dspTime;
+
+            double timediff = Math.Abs(currenttime - enemy.TargetdespTime);
+
+            if(timediff <=1.0f)
+            {
+                Debug.Log("敵を倒した");
+            }
+            else
+            {
+
+            }
+        }
     }
 }

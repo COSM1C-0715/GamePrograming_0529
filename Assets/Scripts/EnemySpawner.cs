@@ -13,15 +13,16 @@ public class EnemySpawner : MonoBehaviour
     Enemy[] Enemies;
 
     [SerializeField]
-    float SpawnTime;
+    float timer = 0;
 
-    [SerializeField]
-    float SpawnTime2;
 
     [SerializeField]
     private int InitialPoolSize;
 
     private Dictionary<int, ObjectPool<Enemy>> EnemyPools = new();
+    Queue<Enemy> EnemyTiming = new();
+
+    public Queue<Enemy> P_EnemyTiming => EnemyTiming;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -35,29 +36,22 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        SpawnTime -= Time.deltaTime;
-        SpawnTime2 -= Time.deltaTime;
-        if(SpawnTime<=0)
-        {
-            SpawnTime = 4;
-            Spawn(Enemies[0].p_EnemyNum);
-        }
-        if (SpawnTime2 <= 0)
-        {
-            Spawn(Enemies[1].p_EnemyNum);
-            SpawnTime2 = 6;
-        }
+        timer = Time.time;
     }
-
+    /// <summary>
+    /// 引数に敵の番号を入れ、番号に合ったプールから敵を取り出して指定の座標に配置する
+    /// </summary>
+    /// <param name="enemynum"></param>
     public void Spawn(int enemynum)
     {
         if (!EnemyPools.TryGetValue(enemynum, out var pool))
         {
             return;
         }
-
+        Debug.Log("モンスターが出てきた");
         Enemy enemy = pool.Get();
-        enemy.transform.position = new Vector2(15f,-0.5f);
+        enemy.transform.position = new Vector2(-11.5f,0.0f) + new Vector2(enemy.p_Speed * 6,0.0f);
+        enemy.TargetdespTime = AudioSettings.dspTime + 5;
         enemy.Initialize(c => OnCoinReturned(c, pool));
     }
 
