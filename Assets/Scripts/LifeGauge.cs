@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using R3;
@@ -11,7 +11,6 @@ public class LifeGauge : MonoBehaviour
     [SerializeField] Image gaugeImage;
     [SerializeField] TextMeshProUGUI lifeText;
     [SerializeField] TextMeshProUGUI maxLifeText;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,6 +21,6 @@ public class LifeGauge : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        lifeText.text = player.life.ToString();
     }
 }

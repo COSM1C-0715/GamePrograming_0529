@@ -52,12 +52,14 @@ public class EnemySpawner : MonoBehaviour
         Enemy enemy = pool.Get();
         enemy.transform.position = new Vector2(-11.5f,0.0f) + new Vector2(enemy.p_Speed * 6,0.0f);
         enemy.TargetdespTime = AudioSettings.dspTime + 5;
-        enemy.Initialize(c => OnCoinReturned(c, pool));
+        EnemyTiming.Enqueue(enemy);
+        enemy.Initialize(c => OnEnemyReturned(c, pool));
     }
 
-    private void OnCoinReturned(Enemy enemy, ObjectPool<Enemy> pool)
+    public void OnEnemyReturned(Enemy enemy, ObjectPool<Enemy> pool)
     {
         pool.Return(enemy);
+        EnemyTiming.Dequeue();
         StartCoroutine(countDisplay.CountUpDisplay());
         scoreManagement.CountAdd();
     }

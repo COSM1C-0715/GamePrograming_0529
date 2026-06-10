@@ -19,7 +19,7 @@ public class Enemy : MonoBehaviour
 
     public double TargetdespTime {  get;  set; }
 
-    Action<Enemy> onReturn;
+    public Action<Enemy> onReturn;
 
     void Awake()
     {
@@ -39,12 +39,5 @@ public class Enemy : MonoBehaviour
     public void Initialize(Action<Enemy> onReturn)
     {
         this.onReturn = onReturn;
-    }
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.name== "ColliderPoint")
-        {
-            onReturn?.Invoke(this);
-        }
     }
 }
