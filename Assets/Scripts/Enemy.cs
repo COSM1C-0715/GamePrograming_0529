@@ -40,4 +40,12 @@ public class Enemy : MonoBehaviour
     {
         this.onReturn = onReturn;
     }
+
+    private void OnCollisionEnter2D(Collision2D coll)
+    {
+        if(coll.gameObject.CompareTag("Player"))
+        {
+            onReturn?.Invoke(this);
+        }
+    }
 }

@@ -83,7 +83,7 @@ public class Player : MonoBehaviour
 
             double timediff = Math.Abs(currenttime - enemy.TargetdespTime);
 
-            if(timediff <=5.0f)
+            if(timediff <=1.0f)
             {
                 Debug.Log("敵を倒した");
                 enemy.onReturn?.Invoke(enemy);
