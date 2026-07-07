@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using TMPro;
 using DG.Tweening;
@@ -25,7 +25,9 @@ public class CountDisplayManagement : MonoBehaviour
 
         yield return null;
 
-        CountDisplayText.transform.DOMoveY(600,1.0f);
+        CountDisplayText.transform.DOMoveY(600,3.0f);
+
+        CountDisplayText.transform.position = new Vector2(240,450);
 
         yield return null;
 

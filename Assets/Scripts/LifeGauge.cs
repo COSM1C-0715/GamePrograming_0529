@@ -14,13 +14,23 @@ public class LifeGauge : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        player.OnActionMesod_Float(UpdateLifeText);
+
+        gaugeImage.fillAmount = 1.0f;
         // ライフの最大値
-        maxLifeText.text = player.MaxLife.ToString();
+        maxLifeText.text = player._MaxLife.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        lifeText.text = player.life.ToString();
+        
+    }
+
+    void UpdateLifeText(float l_currentlife, float l_maxlife)
+    {
+        lifeText.text = l_currentlife.ToString();
+
+        gaugeImage.fillAmount = l_currentlife / l_maxlife;
     }
 }

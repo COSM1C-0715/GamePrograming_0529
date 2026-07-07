@@ -9,16 +9,28 @@ public class Player : MonoBehaviour
     [SerializeField] EnemySpawner Spawner;
     [SerializeField] float speed;
     [SerializeField] float jumpSpeed;
-    public float MaxLife => 100f;
-    public ReactiveProperty<float> life { get; private set; } = new();
+
+    const float MaxLife = 100f;
+
+    ReactiveProperty<float> life = new ReactiveProperty<float>(MaxLife);
+
+    Action<float,float> OnUpdateLifeGauge;
+
+    public float _MaxLife => MaxLife;
 
     InputSystem_Actions action;
 
-    Rigidbody2D rb;
     Enemy enemy;
+
     void Awake()
     {
         action = new InputSystem_Actions();
+        life.Subscribe(currentHP =>
+        {
+            life.Value = Mathf.Clamp(currentHP, 0, MaxLife);
+
+            OnUpdateLifeGauge(currentHP, MaxLife);
+        });
     }
 
     void OnEnable()
@@ -35,8 +47,7 @@ public class Player : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        life.Value = MaxLife;
+        
     }
 
     // Update is called once per frame
@@ -95,6 +106,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void OnActionMesod_Float(Action<float, float> l_updategauge)
+    {
+        OnUpdateLifeGauge = l_updategauge;
+    }
     private void OnCollisionEnter2D(Collision2D col)
     {
         if(col.gameObject.CompareTag("Enemy"))
