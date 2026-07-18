@@ -82,27 +82,24 @@ public class Player : MonoBehaviour
     {
         if(cont.started)
         {
-            Debug.Log("押された");
 
-            Debug.Log(Spawner.P_EnemyTiming.Count);
+            //if (Spawner.P_EnemyTiming.Count==0) return;
 
-            if (Spawner.P_EnemyTiming.Count==0) return;
+            //enemy = Spawner.P_EnemyTiming.Peek();
 
-            enemy = Spawner.P_EnemyTiming.Peek();
+            //double currenttime = AudioSettings.dspTime;
 
-            double currenttime = AudioSettings.dspTime;
+            //double timediff = Math.Abs(currenttime - enemy.TargetdespTime);
 
-            double timediff = Math.Abs(currenttime - enemy.TargetdespTime);
-
-            if(timediff <=0.3f)
-            {
-                Debug.Log("敵を倒した");
-                enemy.onReturn?.Invoke(enemy);
-            }
-            else
-            {
-                //enemy.onReturn?.Invoke(enemy);
-            }
+            //if(timediff <=0.3f)
+            //{
+            //    Debug.Log("敵を倒した");
+            //    enemy.onReturn?.Invoke(enemy);
+            //}
+            //else
+            //{
+            //    //enemy.onReturn?.Invoke(enemy);
+            //}
         }
     }
 

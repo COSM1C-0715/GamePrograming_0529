@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    Action<Enemy> OnInputTimingMethod;
+
     [SerializeField]
     CountDisplayManagement countDisplay;
 
@@ -12,17 +15,13 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     Enemy[] Enemies;
 
-    [SerializeField]
-    float timer = 0;
+    Enemy SpawnEnemy;
 
 
     [SerializeField]
     private int InitialPoolSize;
 
     private Dictionary<int, ObjectPool<Enemy>> EnemyPools = new();
-    Queue<Enemy> EnemyTiming = new();
-
-    public Queue<Enemy> P_EnemyTiming => EnemyTiming;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,34 +31,26 @@ public class EnemySpawner : MonoBehaviour
             EnemyPools[enemynum] = new ObjectPool<Enemy>(prefab, InitialPoolSize);
         }
     }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        timer = Time.time;
-    }
     /// <summary>
     /// 引数に敵の番号を入れ、番号に合ったプールから敵を取り出して指定の座標に配置する
     /// </summary>
     /// <param name="enemynum"></param>
     public void Spawn(int enemynum)
     {
-        if (!EnemyPools.TryGetValue(enemynum, out var pool))
-        {
-            return;
-        }
-        Debug.Log("モンスターが出てきた");
-        Enemy enemy = pool.Get();
-        enemy.transform.position = new Vector2(-11.5f,0.0f) + new Vector2(enemy.p_Speed * 6,0.0f);
-        enemy.TargetdespTime = AudioSettings.dspTime + 5;
-        EnemyTiming.Enqueue(enemy);
-        enemy.Initialize(c => OnEnemyReturned(c, pool));
+        SpawnEnemy = EnemyPools[enemynum].Get();
+        SpawnEnemy.transform.position = new Vector2(-11.5f,0.0f) + new Vector2(SpawnEnemy.p_Speed * 6,0.0f);
+        SpawnEnemy.TargetdespTime = AudioSettings.dspTime + 5;
+        OnInputTimingMethod(SpawnEnemy);
     }
 
-    public void OnEnemyReturned(Enemy enemy, ObjectPool<Enemy> pool)
+    public void EnemyInfoMethod(Action<Enemy> l_enemymethod)
     {
-        pool.Return(enemy);
-        EnemyTiming.Dequeue();
+        OnInputTimingMethod = l_enemymethod;
+    }
+
+    public void OnEnemyReturned()
+    {
+        EnemyPools[2].Return(SpawnEnemy);
         StartCoroutine(countDisplay.CountUpDisplay());
         scoreManagement.CountAdd();
     }

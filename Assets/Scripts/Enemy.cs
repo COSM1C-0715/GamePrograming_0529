@@ -36,16 +36,4 @@ public class Enemy : MonoBehaviour
     {
         rb2d.linearVelocity = InputVec.normalized * Speed;
     }
-    public void Initialize(Action<Enemy> onReturn)
-    {
-        this.onReturn = onReturn;
-    }
-
-    private void OnCollisionEnter2D(Collision2D coll)
-    {
-        if(coll.gameObject.CompareTag("Player"))
-        {
-            onReturn?.Invoke(this);
-        }
-    }
 }
