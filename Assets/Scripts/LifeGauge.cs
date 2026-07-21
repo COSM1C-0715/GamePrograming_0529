@@ -19,12 +19,8 @@ public class LifeGauge : MonoBehaviour
         gaugeImage.fillAmount = 1.0f;
         // ライフの最大値
         maxLifeText.text = player._MaxLife.ToString();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        lifeText.text = maxLifeText.text;
     }
 
     void UpdateLifeText(float l_currentlife, float l_maxlife)

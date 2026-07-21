@@ -10,17 +10,19 @@ public class Player : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] float jumpSpeed;
 
+    Vector3 MoveDir = new Vector3(1.0f, 0.0f,0.0f);
+
     const float MaxLife = 100f;
 
     ReactiveProperty<float> life = new ReactiveProperty<float>(MaxLife);
 
     Action<float,float> OnUpdateLifeGauge;
 
+    Action OnJudge;
+
     public float _MaxLife => MaxLife;
 
     InputSystem_Actions action;
-
-    Enemy enemy;
 
     void Awake()
     {
@@ -49,57 +51,11 @@ public class Player : MonoBehaviour
     {
         
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // 移動
-        //var move = playerInput.actions["Move"].ReadValue<Vector2>();
-        //if (move.x != 0f)
-        //{
-        //    rb.linearVelocityX = move.x * speed;
-
-        //    // 向き
-        //    var localScale = transform.localScale;
-        //    if (move.x < 0)
-        //    {
-        //        localScale.x = 1f;
-        //    }
-        //    else
-        //    {
-        //        localScale.x = -1f;
-        //    }
-        //    transform.localScale = localScale;
-        //}
-
-        //// ジャンプ
-        //if (playerInput.actions["Jump"].WasPressedThisFrame())
-        //{
-        //    rb.linearVelocityY = jumpSpeed;
-        //}
-    }
     void OnJudgePoint(InputAction.CallbackContext cont)
     {
         if(cont.started)
         {
-
-            //if (Spawner.P_EnemyTiming.Count==0) return;
-
-            //enemy = Spawner.P_EnemyTiming.Peek();
-
-            //double currenttime = AudioSettings.dspTime;
-
-            //double timediff = Math.Abs(currenttime - enemy.TargetdespTime);
-
-            //if(timediff <=0.3f)
-            //{
-            //    Debug.Log("敵を倒した");
-            //    enemy.onReturn?.Invoke(enemy);
-            //}
-            //else
-            //{
-            //    //enemy.onReturn?.Invoke(enemy);
-            //}
+            OnJudge();
         }
     }
 
@@ -107,11 +63,20 @@ public class Player : MonoBehaviour
     {
         OnUpdateLifeGauge = l_updategauge;
     }
-    private void OnCollisionEnter2D(Collision2D col)
+
+    public void OnJudgeMethod(Action l_judge)
     {
-        if(col.gameObject.CompareTag("Enemy"))
-        {
-            life.Value -= 10;
-        }
+        OnJudge = l_judge;
     }
+
+    public void SubPlayerHp()
+    {
+        life.Value--;
+    }
+
+    public void PlayerMove()
+    {
+        transform.position = transform.position + (MoveDir.normalized * speed) * Time.deltaTime;
+    }
+
 }
